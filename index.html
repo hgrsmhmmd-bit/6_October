@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>عبور النصر</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+  <div id="editorBar" class="editor-bar intro-hidden hidden">
+    <button id="editToggle" class="editor-btn">تحريك العناصر</button>
+    <button id="resetLayout" class="editor-btn">إعادة الضبط</button>
+    <button id="copyLayout" class="editor-btn">نسخ الإحداثيات</button>
+    <span class="editor-note">الـNudge يعمل على كل عناصر اللعبة</span>
+  </div>
+
+  <div id="stageWrap" class="stage-wrap">
+    <main id="stage" class="stage" aria-label="لعبة عبور النصر">
+      <button id="globalSoundBtn" class="global-sound-btn" aria-label="تشغيل أو كتم الصوت" title="الصوت">
+        <img src="assets/start_sound.png" alt="الصوت" />
+      </button>
+      <section id="introScene" class="scene intro-scene active">
+        <!-- بدّلي الملفات الثلاثة بنفس الأسماء لاحقًا من غير تعديل الكود -->
+        <video id="preloadVideo" class="intro-video sequence-video" src="media/فيديو هبل اللود.mp4" autoplay playsinline preload="auto"></video>
+        <video id="loadingVideo" class="intro-video sequence-video hidden" src="media/فيديو لود.mp4" playsinline preload="auto"></video>
+        <video id="startScreenVideo" class="intro-video sequence-video hidden" src="media/فيديو شاشة ابداء.mp4" playsinline preload="auto"></video>
+        <div id="introBlack" class="intro-black"></div>
+        <button id="introSoundGate" class="intro-sound-gate hidden">اضغطي لبدء الفيديو بالصوت</button>
+      </section>
+
+      <!-- START SCENE -->
+      <section id="startScene" class="scene start-scene">
+        <img class="scene-bg" src="assets/start_bg.png" alt="" />
+
+        <button class="layout-item start-sound image-button hidden" data-layout="start.sound" data-name="أيقونة الصوت"
+                style="left:27px;top:20px;width:95px;height:95px">
+          <img src="assets/start_sound.png" alt="الصوت" />
+        </button>
+
+        <img class="layout-item contain" data-layout="start.title" data-name="عنوان عبور النصر"
+             src="assets/start_title.png" alt="عبور النصر"
+             style="left:456px;top:59px;width:625px;height:300px" />
+
+        <img class="layout-item contain" data-layout="start.mission" data-name="كارت المهمة"
+             src="assets/start_mission.png" alt="ساعد أبطالنا على عبور الماء وتدمير خط بارليف"
+             style="left:1170px;top:48px;width:330px;height:190px" />
+
+        <img class="layout-item contain" data-layout="start.subtitle" data-name="مهمتك كسر خط بارليف"
+             src="assets/start_subtitle.png" alt="مهمتك كسر خط بارليف"
+             style="left:559px;top:268px;width:415px;height:145px" />
+
+        <button id="startGameBtn" class="layout-item start-button image-button" data-layout="start.button" data-name="زر ابدأ اللعبة"
+                style="left:563px;top:424px;width:415px;height:138px">
+          <img src="assets/start_button.png" alt="ابدأ اللعبة" />
+        </button>
+
+        <img class="layout-item contain" data-layout="start.cardTools" data-name="اختر الأدوات المناسبة"
+             src="assets/start_tools.png" alt="اختر الأدوات المناسبة"
+             style="left:1091px;top:851px;width:360px;height:146px" />
+        <img class="layout-item contain" data-layout="start.cardTarget" data-name="اضرب في النقطة الصحيحة"
+             src="assets/start_target.png" alt="اضرب في النقطة الصحيحة"
+             style="left:565px;top:850px;width:400px;height:146px" />
+        <img class="layout-item contain" data-layout="start.cardCross" data-name="اعبر مع أبطالنا"
+             src="assets/start_cross.png" alt="اعبر مع أبطالنا إلى الضفة الأخرى"
+             style="left:62px;top:842px;width:390px;height:146px" />
+      </section>
+
+      <!-- GAME SCENE -->
+      <section id="gameScene" class="scene game-scene">
+        <img id="gameBg" class="scene-bg" src="assets/game_bg.png" alt="خط بارليف" />
+        <img id="breachBg" class="scene-bg breach-bg" src="assets/breach_bg.png" alt="الممر بعد فتحه" />
+        <img id="finalBg" class="scene-bg final-bg" src="assets/final_bg.png" alt="المشهد الختامي" />
+        <div class="vignette"></div>
+
+        <div id="missionHud" class="layout-item hud" data-layout="game.hud" data-name="شريط تقدم فتح الممر"
+             style="left:405px;top:26px;width:725px;height:62px">
+          <div class="hud-label">فتح الممر</div>
+          <div class="progress-shell"><div id="progressBar" class="progress-bar"></div></div>
+        </div>
+
+        <div id="targetZone" class="target-zone" aria-label="منطقة الضرب"></div>
+        <div id="targetMark" class="target-mark hidden"></div>
+
+        <img id="playerWeapon" class="layout-item player-weapon hidden contain" data-layout="game.weapon" data-name="السلاح في يد اللاعب"
+             src="assets/hand_gun.png" alt="السلاح المختار"
+             style="left:-29px;top:604px;width:480px;height:450px" />
+        <img id="waterSpray" class="layout-item water-spray hidden contain" data-layout="game.waterSpray" data-name="رذاذ الماء"
+             src="assets/water_spray.png" alt="رذاذ الماء"
+             style="left:380px;top:340px;width:760px;height:430px" />
+        <img id="grenadeProjectile" class="grenade-projectile hidden contain" src="assets/tool_grenade.png" alt="القنبلة" />
+
+        <div id="villainWrap" class="layout-item villain-wrap hidden" data-layout="game.villain" data-name="رد فعل العدو"
+             style="left:1142px;top:3px;width:330px;height:380px">
+          <img id="villainImg" src="assets/villain_laugh1.png" alt="رد فعل العدو" />
+          <div id="villainText" class="villain-text">هو ده آخرك؟</div>
+        </div>
+
+        <img id="boats" class="layout-item boats hidden contain" data-layout="game.boats" data-name="الزوارق والجنود"
+             src="assets/boats.png" alt="زوارق عسكرية مع جنود"
+             style="left:472px;top:490px;width:400px;height:200px" />
+
+        <nav id="toolDock" class="layout-item tool-dock" data-layout="game.toolDock" data-name="شريط الأسلحة"
+             style="left:455px;top:820px;width:630px;height:185px">
+          <button class="tool-choice" data-tool="grenade" aria-label="القنبلة">
+            <img src="assets/tool_grenade.png" alt="" />
+            <span>قنبلة</span><b id="grenadeTimer" class="cooldown hidden"></b>
+          </button>
+          <button class="tool-choice" data-tool="water" aria-label="مدفع المياه">
+            <img src="assets/tool_water.png" alt="" />
+            <span>مدفع المياه</span>
+          </button>
+          <button class="tool-choice" data-tool="gun" aria-label="المسدس">
+            <img src="assets/tool_gun.png" alt="" />
+            <span>مسدس</span>
+          </button>
+        </nav>
+
+        <div id="flashFx" class="flash-fx"></div>
+        <div id="smokeFx" class="smoke-fx"></div>
+        <div id="dustFx" class="dust-fx"></div>
+        <div id="collapseFx" class="collapse-fx"></div>
+
+        <section id="endingVideoLayer" class="ending-video-layer hidden">
+          <video id="endingBgVideo" class="ending-video ending-bg-video" src="media/october_background.mp4" playsinline preload="metadata"></video>
+          <video id="endingTextVideo" class="ending-video ending-text-video hidden" src="media/october_text_overlay_plain.webm" playsinline preload="metadata"></video>
+          <div id="endingPlainSubtitle" class="ending-plain-subtitle hidden" aria-live="polite"></div>
+          <button id="replayBtn" class="ending-replay-btn" aria-label="إعادة اللعبة">
+            <span class="ending-replay-icon">↻</span>
+            <span>إعادة اللعبة</span>
+          </button>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <aside id="inspector" class="inspector hidden" dir="ltr">
+    <div class="inspector-head">
+      <strong id="selectedName">—</strong>
+      <button id="closeInspector">×</button>
+    </div>
+    <div class="xy-line"><span>X <b id="xRead">0</b></span><span>Y <b id="yRead">0</b></span></div>
+    <div class="inputs">
+      <label>X<input id="xInput" type="number" /></label>
+      <label>Y<input id="yInput" type="number" /></label>
+      <label>W<input id="wInput" type="number" /></label>
+      <label>H<input id="hInput" type="number" /></label>
+    </div>
+    <div class="nudge-pad">
+      <i></i><button data-nudge="0,-1">▲</button><i></i>
+      <button data-nudge="-1,0">◀</button><button class="nudge-10" title="Shift + arrows = 10px">10</button><button data-nudge="1,0">▶</button>
+      <i></i><button data-nudge="0,1">▼</button><i></i>
+    </div>
+    <small>الأسهم = 1px • Shift + الأسهم = 10px • تقدري تسحبي العنصر بالماوس.</small>
+  </aside>
+
+  <div id="toast" class="toast hidden"></div>
+</div>
+
+<audio id="sndGun" src="audio/gun.wav" preload="auto"></audio>
+<audio id="sndThrow" src="audio/throw.wav" preload="auto"></audio>
+<audio id="sndBoom" src="audio/boom.wav" preload="auto"></audio>
+<audio id="sndLaugh" src="audio/laugh.wav" preload="auto"></audio>
+<audio id="sndFear" src="audio/fear.wav" preload="auto"></audio>
+<audio id="sndWater" src="audio/water.wav" preload="auto" loop></audio>
+<audio id="sndVictory" src="audio/victory.wav" preload="auto"></audio>
+<audio id="sndClick" src="audio/click.wav" preload="auto"></audio>
+<script src="app.js"></script>
+</body>
+</html>
