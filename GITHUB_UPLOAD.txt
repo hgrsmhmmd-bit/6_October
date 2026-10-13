@@ -1,0 +1,12 @@
+GitHub Pages optimized build
+
+1) Upload ALL files and folders in this package to the repository root.
+2) Replace the old index.html, app.js, style.css, assets/, audio/, and media/.
+3) Keep GitHub Pages pointed to the branch/root you already use.
+
+Optimization notes:
+- Only the first intro video loads immediately.
+- Loading/start-screen videos are loaded only shortly before use.
+- The ending video starts loading after the user enters the game.
+- MP4 files use web fast-start metadata placement.
+- Media filenames use simple ASCII names for reliable GitHub Pages URLs.
